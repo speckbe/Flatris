@@ -33,3 +33,29 @@ stages:
       inputs:
         targetPath: 'docs'
         artifact: 'webapp'
+
+- stage: Deploy
+  displayName: DeploytoAzureStaticWebApp
+  dependsOn: Build
+
+  jobs:
+  - job: DeployJob
+    displayName: DeployWebApplication
+    steps:
+
+    - download: current
+      artifact: webapp
+      displayName: 'Downloadwebappartifact'
+
+    - script: |
+        echo: "Downloadedfiles."
+        find $(Pipeline.Workspace)/webapp -maxdepth 3 -type f | sort
+        displayName: 'Verifydeploymentfiles'
+
+    - task: AzureStaticWebApp@0
+      displayName: 'DeploytoAzureStaticWebApp'
+      inputs:
+        app_location: '$(PipeLine.Workspace)/webapp'
+        output_location: ''
+        skip_app_build: true
+        skip_api_build: true
