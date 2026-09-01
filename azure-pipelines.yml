@@ -1,7 +1,5 @@
 # Node.js with React
 # Build a Node.js project that uses React.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
 - master
@@ -10,55 +8,63 @@ pool:
   vmImage: ubuntu-latest
 
 stages:
+
 - stage: Build
   displayName: Build
+
   jobs:
   - job: BuildJob
     displayName: Build Javascript Application
+
     steps:
+
     - task: NodeTool@0
       inputs:
         versionSpec: '20.x'
       displayName: 'Install Node.js'
 
     - script: npm install
+      displayName: 'Install dependencies'
+
     - script: npm run build
-      displayName: 'npm install and build'
+      displayName: 'Build application'
 
     - script: |
-        echo: "Files after build"
-        find . -maxdepth 3 -type f | sort
-      displayName: 'Show build folders'
+        echo "Files after build:"
+        find ./docs -maxdepth 3 -type f | sort
+      displayName: 'Show build output'
+
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: 'docs'
         artifact: 'webapp'
+      displayName: 'Publish web application'
+
 
 - stage: Deploy
-  displayName: 'DeploytoAzureStaticWebApp'
+  displayName: 'Deploy to Azure Static Web App'
   dependsOn: Build
 
   jobs:
   - job: DeployJob
-    displayName: 'DeployWebApplication'
+    displayName: 'Deploy Web Application'
+
     steps:
 
     - download: current
       artifact: webapp
-      displayName: 'Downloadwebappartifact'
+      displayName: 'Download webapp artifact'
 
     - script: |
-        echo: "Downloadedfiles."
-        find $(Pipeline.Workspace)/webapp -maxdepth 3 -type f | sort
-        displayName: 'Verifydeploymentfiles'
+        echo "Downloaded files:"
+        find "$(Pipeline.Workspace)/webapp" -maxdepth 3 -type f | sort
+      displayName: 'Verify deployment files'
 
     - task: AzureStaticWebApp@0
-      displayName: 'DeploytoAzureStaticWebApp'
+      displayName: 'Deploy to Azure Static Web App'
       inputs:
-        app_location: '$(PipeLine.Workspace)/webapp'
+        app_location: '$(Pipeline.Workspace)/webapp'
         output_location: ''
         skip_app_build: true
         skip_api_build: true
-        azure_static_web_apps_api_token: $(Deployment_token)
-
-  
+        azure_static_web_apps_api_token: $(deployment_token)
