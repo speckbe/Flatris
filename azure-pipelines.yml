@@ -60,6 +60,11 @@ stages:
         find "$(Pipeline.Workspace)/webapp" -maxdepth 3 -type f | sort
       displayName: 'Verify deployment files'
 
+    - script: |
+        mkdir -p "$(System.DefaultWorkingDirectory)/webapp"
+        cp -r "$(Pipeline.Workspace)/webapp/." "$(System.DefaultWorkingDirectory)/webapp/"
+      displayName: 'Copy artifact into working directory'
+
     - task: AzureStaticWebApp@0
       displayName: 'Deploy to Azure Static Web App'
       inputs:
