@@ -25,6 +25,9 @@ stages:
     - script: npm run build
       displayName: 'npm install and build'
 
+    - script: |
+        echo: "Files after build"
+        find . -maxdepth 3 -type f | sort
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: 'dist'
