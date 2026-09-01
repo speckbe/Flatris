@@ -28,7 +28,8 @@ stages:
     - script: |
         echo: "Files after build"
         find . -maxdepth 3 -type f | sort
+      displayName: 'Show build folders'
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: 'build'
+        targetPath: 'docs'
         artifact: 'webapp'
