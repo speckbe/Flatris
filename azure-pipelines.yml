@@ -35,12 +35,12 @@ stages:
         artifact: 'webapp'
 
 - stage: Deploy
-  displayName: DeploytoAzureStaticWebApp
+  displayName: 'DeploytoAzureStaticWebApp'
   dependsOn: Build
 
   jobs:
   - job: DeployJob
-    displayName: DeployWebApplication
+    displayName: 'DeployWebApplication'
     steps:
 
     - download: current
