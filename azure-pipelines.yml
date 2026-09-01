@@ -60,3 +60,5 @@ stages:
         skip_app_build: true
         skip_api_build: true
         azure_static_web_apps_api_token: $(Deployment_token)
+
+  
