@@ -63,7 +63,7 @@ stages:
     - task: AzureStaticWebApp@0
       displayName: 'Deploy to Azure Static Web App'
       inputs:
-        app_location: '$(Pipeline.Workspace)/webapp'
+        app_location: 'webapp'
         output_location: ''
         skip_app_build: true
         skip_api_build: true
